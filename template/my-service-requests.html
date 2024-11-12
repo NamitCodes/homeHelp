@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>My Service Requests</h2>
+
+    {% if session.get('role') == "professional" and professional.approval_status != True %}
+        <h3>You approval status has not yet been approved. Please contact admin.</h3>
+    {% else %}
+
+        <div class="form-group my-5">
+
+                <table class="table table-hover">
+                    <thead class="thead">
+                        <tr>
+                            <th>Service Request ID</th>
+                            <th>Service Name</th>
+                            {% if session.get('role') == "professional" %}
+                            <th>Customer</th>
+                            <th>Customer Phone no.</th>
+                            {% endif %}
+                            {% if session.get('role') == "customer" %}
+                            <th>Professional</th>
+                            <th>Professional Phone No.</th>
+                            {% endif %}
+
+                            <th>Date of Request</th>
+                            
+                            <th>Date for Service</th>
+                            <th>Status</th>
+
+
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for service_request in service_requests %}
+                        <tr>
+                            <td>{{ service_request.service_request_id }}</td>
+                            <td>{{ service_request.service.name }}</td>
+                            {% if session.get('role') == "professional" %}
+                            <td>{{ service_request.customer.name }}</td>
+                            <td>{{ service_request.customer.phone_num }}</td>
+                            {% endif %}
+                            {% if session.get('role') == "customer" %}
+                            <td>{{ service_request.professional.name }}</td>
+                            <td>{{ service_request.professional.phone_num }}</td>
+                            {% endif %}
+
+                            <td>{{ service_request.date_of_request }}</td>
+                            
+                            
+                            <td>{{ service_request.date_for_request }}</td>
+                            <td>{{ service_request.status }}</td>
+                            
+
+                            <td>
+                                <div class="d-flex">
+                                    {% if session.get('role') == "customer" and service_request.status != "closed" %}
+                                        {% if service_request.status != "completed" %}
+                                            <div class="mx-2">
+                                                <a href="{{ url_for('update_service_request', service_request_id=service_request.service_request_id) }}"
+                                                    class="btn btn-sm btn-warning">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+
+                                        {% if service_request.status == "completed" %}
+                                        <div class="mx-2">
+                                            <a href="{{ url_for('update_service_request', service_request_id=service_request.service_request_id) }}">
+                                                <button class="btn btn-sm btn-success">Close</button>
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                    
+
+                                        <div class="mx-2">
+                                            <form
+                                                action="{{ url_for('delete_service_request', service_request_id=service_request.service_request_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this service request?');">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash"></i> 
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+
+
+                                    {% if session.get('role') == "professional" %}
+                                    <div class="d-flex mb-3">
+                                        {% if service_request.status == 'requested' %}
+                                            <div class="mx-2">
+                                                <a href="{{ url_for('accept_service_request', service_request_id=service_request.service_request_id) }}">
+                                                    <button class="btn btn-sm btn-success">Accept</button>
+                                                </a>
+                                            </div>
+                                            <div class="mx-2">
+                                                <a href="{{ url_for('reject_service_request', service_request_id=service_request.service_request_id) }}" 
+                                                   onclick="return confirm('Are you sure you want to reject this service request?');">
+                                                    <button class="btn btn-sm btn-danger">Reject</button>
+                                                </a>
+                                            </div>
+                                        {% elif service_request.status == 'accepted' %}
+                                            <div class="mx-2">
+                                                <a href="{{ url_for('accept_service_request', service_request_id=service_request.service_request_id) }}" 
+                                                   onclick="return confirm('Are you sure you want to mark this service request as completed?');">
+                                                    <button class="btn btn-sm btn-light">Mark as Done</button>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                                                        
+
+
+                                </div>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        <h2>Service History</h2>
+        <div class="form-group">
+
+                <table class="table table-hover">
+                    <thead class="thead">
+                        <tr>
+                            <th>Service Request ID</th>
+                            <th>Service Name</th>
+                            {% if session.get('role') == "professional" %}
+                            <th>Customer</th>
+                            <th>Customer Phone no.</th>
+                            <!-- Yahaan pe add Rate Customer -->
+                             <th>Rate Customer</th>
+                            {% endif %}
+                            {% if session.get('role') == "customer" %}
+                            <th>Professional</th>
+                            <th>Professional Phone No.</th>
+                            {% endif %}
+                            
+                            <th>Date of Request</th>
+                            
+                            <th>Date for Service</th>
+                            <th>Rating</th>
+                            <th>Status</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for closed_service_request in closed_service_requests %}
+                        <tr>
+                            <td>{{ closed_service_request.service_request_id }}</td>
+                            <td>{{ closed_service_request.service.name }}</td>
+                            {% if session.get('role') == "professional" %}
+                            <td>{{ closed_service_request.customer.name }}</td>
+                            <td>{{ closed_service_request.customer.phone_num }}</td>
+                            <td>
+                                {% if closed_service_request.customer_rating == None %}
+                                <div class="mx-2">
+                                    <a href="{{ url_for('update_service_request', service_request_id=closed_service_request.service_request_id) }}"
+                                        class="btn btn-sm btn-warning">
+                                        <i class="bi bi-star"></i>
+                                    </a>
+                                </div>
+                                {% elif closed_service_request.customer_rating != None %}
+                                <div class="mx-2">
+                                    {{ closed_service_request.customer_rating }}
+                                </div>
+                                {% endif %}
+                            </td>
+                            {% endif %}
+                            {% if session.get('role') == "customer" %}
+                            <td>{{ closed_service_request.professional.name }}</td>
+                            <td>{{ closed_service_request.professional.phone_num }}</td>
+                            {% endif %}
+
+                            <td>{{ closed_service_request.date_of_request }}</td>
+                            
+                            
+                            <td>{{ closed_service_request.date_for_request }}</td>
+                            <td>{{ closed_service_request.service_rating }}</td>
+                            <td>{{ closed_service_request.status }}</td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+
+    {% endif %}
+
+{% endblock %}

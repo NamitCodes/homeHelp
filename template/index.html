@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}homeHelp{% endblock %}
+
+{% block content %}
+
+{% if not session.get('name', None) %}
+<div>
+    <div class="container col-xxl-8 px-4 py-4">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-6">
+                <img src="{{ url_for('static', filename='/welcome-illustration.png') }}"
+                    class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+            </div>
+            <div class="col-lg-6">
+                <h1 class="display-5 fw-bold lh-1 mb-3">Welcome to homeHelp!</h1>
+                <p class="lead">Your one-stop solution for all household services.</p>
+                <p class="lead">From cleaning to repairs, our professional team is here to make your life easier.
+                    Discover quality service providers at the tap of a button.</p>
+                <br>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <button class="btn btn-outline-primary btn-lg px-4 me-md-2"
+                        onclick="location.href='{{ url_for('custSignup') }}'" type="button">Get Started</button>
+                    <!-- <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <h1 class="mb-3">Categories</h1>
+    <div class="d-flex justify-content-center my-4">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" style="width: 70%; max-width: 900px;">
+          <!-- Carousel Indicators -->
+          <div class="carousel-indicators">
+            {% for category, path in dict_category_path.items() %}
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ loop.index0 }}" 
+                      class="{% if loop.first %}active{% endif %}" 
+                      aria-current="{% if loop.first %}true{% endif %}" 
+                      aria-label="Slide {{ loop.index }}"></button>
+            {% endfor %}
+          </div>
+      
+          <!-- Carousel Items -->
+          <div class="carousel-inner">
+            {% for category, path in dict_category_path.items() %}
+              <div class="carousel-item {% if loop.first %}active{% endif %}">
+                <img src="{{ url_for('static', filename=path) }}" class="d-block w-100" alt="{{ category }} image" style="height: 400px; object-fit: cover; opacity: 0.8;">
+                <div class="carousel-caption d-md-block" style="background-color: rgba(0, 0, 0, 0.6); color: #f1f1f1; padding: 1rem;">
+                  <h5 class="text display-6" style="font-size: 2rem;">{{ category }}</h5>
+                  <p>Expert {{ category.lower() }} services for your home.</p>
+                  <a href="{{ url_for('custSignup') }}" class="btn btn-primary btn-sm mt-2" onclick="confirm('Please sign up or log in to access this service.', 'success')">
+                    Explore {{ category }}
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+      
+          <!-- Carousel Controls -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+
+    <!-- Additional Information Section -->
+    <div class="p-5 my-4 bg-light rounded-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2>Why Choose HomeHelp?</h2>
+                <ul class="list-unstyled mt-3 mx-3 fs-5">
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> Reliable and Verified Professionals
+                    </li>
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> Affordable and Transparent Pricing
+                    </li>
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> Convenient Scheduling</li>
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> Satisfaction Guaranteed</li>
+                </ul>
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="{{ url_for('static', filename='/Screenshot 2024-10-30 121255.png') }}" alt="Home Services"
+                    class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endif %}
+
+{% endblock %}

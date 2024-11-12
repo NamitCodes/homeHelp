@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %} Customer Summary {% endblock %}
+
+{% block content %}
+
+<h1 class="text-center mb-4">Summary</h1>
+{% if session.get('role') == 'customer' %}
+
+<div class="row mb-4 justify-content-center">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Service Requests Over Time</h5>
+            </div>
+            <div class="card-body">
+                <div id="customer1" style="width: 100%; height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Service Requests by Status</h5>
+            </div>
+            <div class="card-body">
+                <div id="customer2" style="width: 100%; height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+<script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-base.min.js"></script>
+<script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-sunburst.min.js"></script>
+<script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-core.min.js"></script>
+
+<script>
+    
+    anychart.onDocumentReady(function() {
+        var data = {{ customer_1_data|safe }};
+        // Create a line chart
+        var chart = anychart.line();
+
+        // Prepare data for the line chart
+        var seriesData = data.map(function(item) {
+            return { x: item[0], value: item[1] };
+        });
+
+        // Set the data
+        chart.data(seriesData);
+
+        // Set chart title
+        // chart.title("Service Requests Over Time");
+
+        // Configure y-axis to show only integers
+        chart.yScale().ticks().interval(1); 
+
+        // Set the container and render the chart
+        chart.container("customer1");
+        chart.draw();
+    });
+
+    
+    anychart.onDocumentReady(function() {
+        
+        var data = {{ customer_2_data|safe }};
+        
+        var chart = anychart.bar();
+
+        var seriesData = data.map(function(item) {
+            return { x: item[0], value: item[1] };
+        });
+
+        chart.data(seriesData);
+
+        // chart.title("Service Requests by Status");
+
+        // Configure y-axis to show only integers
+        chart.yScale().ticks().interval(1); 
+
+        chart.container("customer2");
+        chart.draw();
+    });
+</script>
+{% endblock %}

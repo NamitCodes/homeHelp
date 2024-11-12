@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %} Professional Summary {% endblock %}
+
+{% block content %}
+
+<h1 class="text-center mb-4">Summary</h1>
+{% if session.get('role') == 'professional' %}
+<div class="row mb-4 justify-content-center">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Professional Ratings</h5>
+            </div>
+            <div class="card-body">
+                <div id="professional1" style="width: 100%; height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Closed Service Requests Over Time</h5>
+            </div>
+            <div class="card-body">
+                <div id="professional2" style="width: 100%; height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4 justify-content-center">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Service Requests by Status</h5>
+            </div>
+            <div class="card-body">
+                <div id="professional3" style="width: 100%; height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+<script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-base.min.js"></script>
+<script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-sunburst.min.js"></script>
+<script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-core.min.js"></script>
+
+<script>
+    anychart.onDocumentReady(function () {
+        var data = {{ professional_1_data| safe }};
+
+    var chart = anychart.pie();
+
+    chart.data(data);
+
+    // chart.title("Professional Ratings");
+
+    chart.container("professional1");
+    chart.draw();
+    });
+
+    anychart.onDocumentReady(function () {
+
+    var data = {{ professional_2_data| safe }};
+
+    var chart = anychart.line();
+
+    var seriesData = data.map(function (item) {
+        return { x: item[0], value: item[1] };
+    });
+
+    chart.data(seriesData);
+
+    // Set chart title
+    // chart.title("Closed Service Requests Over Time");
+
+    chart.yScale().ticks().interval(1); // Set y-axis interval to 1
+
+    chart.container("professional2");
+    chart.draw();
+    });
+
+    
+    anychart.onDocumentReady(function() {
+        var data = {{ professional_3_data|safe }};
+
+        var chart = anychart.bar();
+
+        var seriesData = data.map(function(item) {
+            return { x: item[0], value: item[1] };
+        });
+
+        chart.data(seriesData);
+
+        // Set chart title
+        // chart.title("Service Requests by Status");
+
+        chart.yScale().ticks().interval(1); // Set y-axis interval to 1
+
+        chart.container("professional3");
+        chart.draw();
+    });
+
+</script>
+{% endblock %}

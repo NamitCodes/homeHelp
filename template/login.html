@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %} Customer Login {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center my-5">
+  <div class="p-5 shadow-sm rounded" style="width: 60%; border: 1px solid #ced4da;">
+    <h1 class="mb-4 display-6" style="font-weight: 500;">Log In</h1>
+    <form method="post" action="/login">
+      <div class="form-group mb-3">
+        <input type="email" class="form-control py-2" placeholder="Email Address" name="email" required>
+      </div>
+      <div class="form-group mb-3">
+        <input type="password" class="form-control py-2" placeholder="Password" name="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary mb-3 w-100">Log In</button>
+    </form>
+    <div class="text-center mt-3">
+      <a href="/customer/signup" class="text-decoration-none text-primary">Don't have an account? Create a new one</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

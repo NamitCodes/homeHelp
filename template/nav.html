@@ -1,0 +1,71 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-2">
+    <div class="container">
+        <a class="navbar-brand" href="/ ">homeHelp</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+            <ul class="navbar-nav" style="font-size: 1.1rem; align-items: baseline;">
+                <!-- If no user is logged in -->
+                {% if not session.get('name') %}
+                <li class="nav-item">
+                    <a class="nav-link mx-3" style="font-size: 1.1rem;" href="/login">Sign up / Log in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-success" href="/professional/signup">Become a homeHelper</a>
+                </li>
+
+                {% else %}
+                <!-- If a user is logged in -->
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Hi, {{ session['name'].capitalize() }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ url_for('search') }}">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/summary">Summary</a>
+                </li>
+
+
+                <li class="nav-item dropdown">
+                    {% if session.get('role') == 'customer' and session.get('profile_pic') %}
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ url_for('static', filename='cust-profile-pics/'+session.get('profile_pic')) }}"
+                            alt="Profile pic" class="rounded-circle" style="height: 3rem; width: 3rem;">
+                    </a>
+                    {% elif session.get('role') == 'professional' and session.get('profile_pic') %}
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ url_for('static', filename='prof-profile-pics/'+session.get('profile_pic')) }}"
+                            alt="Profile pic" class="rounded-circle" style="height: 3rem; width: 3rem;">
+                    </a>
+                    {% else %}
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <img src="https://api.dicebear.com/9.x/lorelei/svg?seed={{ session['name'] }}&mouth=happy01,happy02,happy03,happy04,happy05,happy06,happy07,happy08,happy09,happy10,happy11,happy12,happy13,happy14,happy15,happy16,happy17,happy18&backgroundColor=d1d4f9,b6e3f4,c0aede,ffd5dc,ffdfbf"
+                            alt="Avatar" class="rounded-circle" style="height: 3rem; width: 3rem;">
+                    </a>
+                    {% endif %}
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        {% if session.get('role') != 'admin' %}
+                        <a class="dropdown-item" href="/edit-profile">Edit Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/my-service-requests">My Service Requests</a>
+                        <div class="dropdown-divider"></div>
+                        {% endif %}
+                        <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                    </div>
+                </li>
+
+
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+</nav>

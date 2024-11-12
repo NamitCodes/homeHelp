@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin Roles {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center my-5">
+    <div class="p-5 shadow-sm rounded" style="width: 70%; border: 1px solid #ced4da;">
+        <h1 class="mb-3">Add a new service</h1>
+        <form action="/admin/add_service" method="POST" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+                <label for="name">Service Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter service name" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="category">Category</label>
+                <input type="text" class="form-control" id="category" name="category"
+                    placeholder="Enter service category" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="base_price">Base Price</label>
+                <input type="number" class="form-control" id="base_price" name="base_price"
+                    placeholder="Enter base price" required min="0">
+            </div>
+            <div class="form-group mb-3">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3"
+                    placeholder="Enter service description"></textarea>
+            </div>
+            <div class="form-group mb-3">
+                <label for="image" class="form-label">Upload an Image</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+              </div>
+              
+            <button type="submit" class="btn btn-primary">Add Service</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

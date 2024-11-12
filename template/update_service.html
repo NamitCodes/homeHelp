@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin Roles {% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8" style="border: 2px solid #ced4da; border-radius: 10px; padding: 20px;">
+            <h1 class="mb-4 text-center">Update Service</h1>
+            <form action="{{ url_for('update_service', service_id=service.service_id) }}" method="POST" enctype="multipart/form-data">
+                <div class="form-group mb-3">
+                    <label for="name">Service Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ service.name }}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" id="category" name="category" value="{{ service.category }}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="base_price">Base Price</label>
+                    <input type="number" step="0.01" class="form-control" id="base_price" name="base_price" value="{{ service.base_price }}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3">{{ service.description }}</textarea>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="image" class="form-label">Upload an Image</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                    <small class="form-text text-muted">Choose an image file (JPEG, PNG, GIF) to upload.</small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary mb-3">Update Service</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

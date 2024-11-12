@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %} Admin Summary {% endblock %}
+
+{% block content %}
+
+<h1 class="text-center mb-4">Summary</h1>
+{% if session.get('role') == 'admin' %}
+<div class="container mt-4">
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"># of Service Requests by Rating</h5>
+                </div>
+                <div class="card-body" style="width: 100%; height: 40rem;">
+                    <div id="admin1" style="width: 100%; height: 37rem;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mb-4">
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"># Service Requests by Date</h5>
+                </div>
+                <div class="card-body">
+                    <div id="admin2" style="width: 100%; height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"># Service Requests by Status</h5>
+                </div>
+                <div class="card-body">
+                    <div id="admin3" style="width: 100%; height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Service Requests by Area</h5>
+                </div>
+                <div class="card-body">
+                    <div id="admin4" style="width: 100%; height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Service Request Popularity</h5>
+                </div>
+                <div class="card-body">
+                    <div id="admin5" style="width: 100%; height: 25rem;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+
+<script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-base.min.js"></script>
+<script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-sunburst.min.js"></script>
+<script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-core.min.js"></script>
+
+<script>
+    
+    anychart.onDocumentReady(function () {
+        var data = [{{ data| safe }}];  // |safe prevents Jinja from escaping the JSON
+    // var data = [
+    //     {
+    //         name: "Company A", children: [
+    //             {
+    //                 name: "Technical", children: [
+    //                     { name: "Team Leaders", value: 7 },
+    //                     { name: "Architects", value: 3 },
+    //                     { name: "Developers", value: 35 },
+    //                     { name: "Testers", value: 15 }
+    //                 ]
+    //             },
+    //             {
+    //                 name: "Sales", children: [
+    //                     { name: "Analysts", value: 12 },
+    //                     { name: "Executives", value: 8 }
+    //                 ]
+    //             },
+    //             { name: "HR", value: 3 },
+    //             { name: "Management", value: 7 }
+    //         ]
+    //     }
+    // ];
+
+    // Create a chart and set the data
+    var chart = anychart.sunburst(data, "as-tree");
+
+    // Set the calculation mode
+    chart.calculationMode("parent-independent");
+
+    // Set the chart title
+    chart.title().useHtml(true);
+    // chart.title("# of Service Requests by Rating<br><br>" +
+    //     "<span style='font-size:12; font-style:italic'>" +
+    //     "# of Service Requests by Rating</span>");
+    // chart.title("# of Service Requests by Rating");
+
+    // Set the container id
+    chart.container("admin1");
+
+    // Initiate drawing the chart
+    chart.draw();
+        
+    });
+
+    anychart.onDocumentReady(function () {
+        // var data = [
+        //     ["January", 10000],
+        //     ["February", 12000],
+        //     ["March", 18000],
+        //     ["April", 11000],
+        //     ["May", 9000]
+        // ];
+
+        var data = {{ admin_2_data| safe
+    }};
+    // console.log(data)
+    chart = anychart.line();
+
+    var series = chart.line(data);
+
+    // chart.title("# Service Requests by Date");
+
+    chart.container("admin2");
+
+    chart.draw();
+    });
+
+    anychart.onDocumentReady(function () {
+
+        var data = {{ admin_3_data | safe
+    }};
+
+    var chart = anychart.bar();
+
+    chart.data(data);
+
+    // chart.title("# Service Requests by Status");
+
+    chart.yAxis().title("Number of Requests");
+    chart.xAxis().title("Status");
+
+    chart.yScale().ticks().interval(1);
+
+    chart.container("admin3");
+    chart.draw();
+  });
+
+
+    anychart.onDocumentReady(function () {
+
+        var data = {{ admin_4_data| safe
+    }};
+
+    var chart = anychart.pie();
+
+    chart.data(data);
+
+    // chart.title("Service Requests by Area");
+
+    chart.container("admin4");
+    chart.draw();
+  });
+
+    anychart.onDocumentReady(function () {
+        var data = {{ admin_5_data| safe
+    }};
+
+    var chart = anychart.pie();
+
+    chart.data(data);
+
+    // chart.title("Service Requests Popularity");
+
+    chart.container("admin5");
+    chart.draw();
+    });
+
+
+</script>
+{% endblock %}

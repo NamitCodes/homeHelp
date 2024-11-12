@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %} Customer Signup {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center my-5">
+  <div class="p-5 shadow-sm rounded" style="width: 60%; border: 1px solid #ced4da;">
+    <h1 class="mb-3">Customer Signup</h1>
+    <form method="post" action="/customer/signup">
+
+      <div class="form-group mb-3">
+        <label for="">Basic Details</label>
+        <input type="text" class="form-control" placeholder="Name" name="name" required>
+      </div>
+      <div class="form-group mb-3">
+        <input type="email" class="form-control" placeholder="Email Address" name="email" required>
+      </div>
+      <div class="form-group mb-3">
+        <input type="password" class="form-control" placeholder="Password" name="password" required>
+      </div>
+      <div class="form-group mb-3">
+        <input type="tel" class="form-control" placeholder="Phone Number" name="phone_num" required>
+      </div>
+      <div class="form-group mb-3">
+        <label for="areas">Select your area</label>
+        <select class="form-control" id="exampleFormControlSelect1" name="area">
+          <option selected>-- Select --</option>
+          <option> Delhi NCR</option>
+          <option>Chennai</option>
+          <option>Bangalore</option>
+          <option>Mumbai</option>
+          <option>Jaipur</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary mb-3 w-100">Sign Up</button>
+
+    </form>
+    <div class="text-center mt-3">
+      <a href="/login">Already have a account? Log in instead</a>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

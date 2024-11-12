@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 style="text-align: center;" class="mb-3">Update Service Request</h3>
+
+    <div class="d-flex justify-content-center">
+        <div class="border border-secondary" style="width: 60%;">
+            <div class="p-4">
+                <div class="mb-3">
+                    <strong>Service Name:</strong> {{ service_request.service.name }}
+                </div>
+                <div class="mb-3">
+                    <strong>Service Description:</strong> {{ service_request.service.description }}
+                </div>
+    
+                <form method="POST" action="{{ url_for('update_service_request', service_request_id=service_request.service_request_id) }}">
+                    {% if service_request.status != 'completed' and service_request.status != 'closed' %}
+                    <div class="mt-3">
+                        <label for="date_for_request" class="form-label">
+                            Edit Date for Request (Current: {{ service_request.date_for_request }})
+                        </label>
+                        <input type="date" name="date_for_request" class="form-control" required style="width: 60%;">
+                    </div>
+                    {% endif %}
+    
+                    <div class="mt-4">
+                        <h5 class="">Professional Details</h5>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Professional ID:</strong> {{ service_request.professional.id }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Name of Professional:</strong> {{ service_request.professional.name }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Phone No. of Professional:</strong> {{ service_request.professional.phone_num }}
+                    </div>
+    
+                    {% if service_request.status == 'completed' %}
+                    <div class="mb-3">
+                        <label for="service_rating" class="form-label">Rate the Service:</label>
+                        <select class="form-select" id="service_rating" name="service_rating" required>
+                            <option selected disabled>Choose rating...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="remarks" class="form-label">Remarks:</label>
+                        <textarea class="form-control" name="remarks" id="remarks" rows="3" placeholder="Any remarks..."></textarea>
+                    </div>
+                    {% elif service_request.status == 'closed' %}
+                    <div class="mt-4">
+                        <h5 class="card-title">Customer Details</h5>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Customer ID:</strong> {{ service_request.customer.id }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Name of Customer:</strong> {{ service_request.customer.name }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Phone No. of Customer:</strong> {{ service_request.customer.phone_num }}
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="customer_rating" class="form-label">Rate the Customer:</label>
+                        <select class="form-select" id="customer_rating" name="customer_rating" required>
+                            <option selected disabled>Choose rating...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    {% else %}
+                    <div class="mb-3"> Rating and Remarks will be enabled after status becomes 'closed'
+                    </div>
+                    {% endif %}
+    
+                    <button type="submit" class="btn btn-primary">Update Request</button>
+                    <a href="{{ url_for('my_service_requests') }}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
